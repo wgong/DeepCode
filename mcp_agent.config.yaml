@@ -101,9 +101,9 @@ mcp:
       env:
         PYTHONPATH: .
 # LLM Provider Priority (选择使用哪个LLM / Choose which LLM to use)
-# Options: "anthropic", "google", "openai"
+# Options: "anthropic", "google", "openai", "openrouter", "bedrock"
 # If not set or provider unavailable, will fallback to first available provider
-llm_provider: "google"  # 设置为 "google", "anthropic", 或 "openai"
+llm_provider: "google"  # 设置为 "google", "anthropic", "openai", "openrouter", 或 "bedrock"
 
 openai:
   base_max_tokens: 40000
@@ -122,5 +122,31 @@ google:
 
 anthropic:
   default_model: "claude-sonnet-4.5"
+
+# Configuration for OpenRouter (unified LLM provider)
+openrouter:
+  base_max_tokens: 40000
+  # OpenRouter model examples:
+  # default_model: "anthropic/claude-sonnet-4"
+  # default_model: "google/gemini-2.0-flash-thinking-exp:free"
+  # default_model: "openai/gpt-4o"
+  # default_model: "deepseek/deepseek-chat"
+  default_model: "anthropic/claude-sonnet-4"
+  max_tokens_policy: adaptive
+  retry_max_tokens: 32768
+  # Optional: site_url and app_name for OpenRouter rankings
+  site_url: ""
+  app_name: "DeepCode"
+
+# Configuration for AWS Bedrock
+bedrock:
+  base_max_tokens: 40000
+  # Bedrock model examples:
+  # default_model: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  # default_model: "anthropic.claude-3-opus-20240229-v1:0"
+  # default_model: "meta.llama3-2-90b-instruct-v1:0"
+  default_model: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  max_tokens_policy: adaptive
+  retry_max_tokens: 32768
 
 planning_mode: traditional

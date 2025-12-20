@@ -43,6 +43,13 @@ def get_preferred_llm_class(config_path: str = "mcp_agent.secrets.yaml") -> Type
         anthropic_key = secrets.get("anthropic", {}).get("api_key", "").strip()
         google_key = secrets.get("google", {}).get("api_key", "").strip()
         openai_key = secrets.get("openai", {}).get("api_key", "").strip()
+        openrouter_key = secrets.get("openrouter", {}).get("api_key", "").strip()
+
+        # For Bedrock, check AWS credentials
+        bedrock_config = secrets.get("bedrock", {})
+        bedrock_key = bedrock_config.get("aws_access_key_id", "").strip()
+        bedrock_secret = bedrock_config.get("aws_secret_access_key", "").strip()
+        bedrock_available = bool(bedrock_key and bedrock_secret)
 
         # Read user preference from main config
         main_config_path = "mcp_agent.config.yaml"
@@ -53,6 +60,7 @@ def get_preferred_llm_class(config_path: str = "mcp_agent.secrets.yaml") -> Type
                 preferred_provider = main_config.get("llm_provider", "").strip().lower()
 
         # Map of providers to their classes and keys
+        # OpenRouter and Bedrock use OpenAI-compatible interface
         provider_map = {
             "anthropic": (
                 AnthropicAugmentedLLM,
@@ -61,6 +69,8 @@ def get_preferred_llm_class(config_path: str = "mcp_agent.secrets.yaml") -> Type
             ),
             "google": (GoogleAugmentedLLM, google_key, "GoogleAugmentedLLM"),
             "openai": (OpenAIAugmentedLLM, openai_key, "OpenAIAugmentedLLM"),
+            "openrouter": (OpenAIAugmentedLLM, openrouter_key, "OpenAIAugmentedLLM (OpenRouter)"),
+            "bedrock": (OpenAIAugmentedLLM, bedrock_available, "OpenAIAugmentedLLM (AWS Bedrock)"),
         }
 
         # Try user's preferred provider first
@@ -138,7 +148,7 @@ def get_default_models(config_path: str = "mcp_agent.config.yaml"):
         config_path: Path to the configuration file
 
     Returns:
-        dict: Dictionary with 'anthropic', 'openai', and 'google' default models
+        dict: Dictionary with 'anthropic', 'openai', 'google', 'openrouter', and 'bedrock' default models
     """
     try:
         if os.path.exists(config_path):
@@ -149,17 +159,23 @@ def get_default_models(config_path: str = "mcp_agent.config.yaml"):
             anthropic_config = config.get("anthropic") or {}
             openai_config = config.get("openai") or {}
             google_config = config.get("google") or {}
+            openrouter_config = config.get("openrouter") or {}
+            bedrock_config = config.get("bedrock") or {}
 
             anthropic_model = anthropic_config.get(
                 "default_model", "claude-sonnet-4-20250514"
             )
             openai_model = openai_config.get("default_model", "o3-mini")
             google_model = google_config.get("default_model", "gemini-2.0-flash")
+            openrouter_model = openrouter_config.get("default_model", "anthropic/claude-sonnet-4")
+            bedrock_model = bedrock_config.get("default_model", "anthropic.claude-3-5-sonnet-20241022-v2:0")
 
             return {
                 "anthropic": anthropic_model,
                 "openai": openai_model,
                 "google": google_model,
+                "openrouter": openrouter_model,
+                "bedrock": bedrock_model,
             }
         else:
             print(f"Config file {config_path} not found, using default models")
@@ -167,6 +183,8 @@ def get_default_models(config_path: str = "mcp_agent.config.yaml"):
                 "anthropic": "claude-sonnet-4-20250514",
                 "openai": "o3-mini",
                 "google": "gemini-2.0-flash",
+                "openrouter": "anthropic/claude-sonnet-4",
+                "bedrock": "anthropic.claude-3-5-sonnet-20241022-v2:0",
             }
 
     except Exception as e:
@@ -175,6 +193,8 @@ def get_default_models(config_path: str = "mcp_agent.config.yaml"):
             "anthropic": "claude-sonnet-4-20250514",
             "openai": "o3-mini",
             "google": "gemini-2.0-flash",
+            "openrouter": "anthropic/claude-sonnet-4",
+            "bedrock": "anthropic.claude-3-5-sonnet-20241022-v2:0",
         }
 
 
