@@ -39,16 +39,16 @@ def get_preferred_llm_class(config_path: str = "mcp_agent.secrets.yaml") -> Type
         with open(config_path, "r", encoding="utf-8") as f:
             secrets = yaml.safe_load(f)
 
-        # Get API keys
-        anthropic_key = secrets.get("anthropic", {}).get("api_key", "").strip()
-        google_key = secrets.get("google", {}).get("api_key", "").strip()
-        openai_key = secrets.get("openai", {}).get("api_key", "").strip()
-        openrouter_key = secrets.get("openrouter", {}).get("api_key", "").strip()
+        # Get API keys - prefer environment variables over config file
+        anthropic_key = os.getenv("ANTHROPIC_API_KEY") or secrets.get("anthropic", {}).get("api_key", "").strip()
+        google_key = os.getenv("GOOGLE_API_KEY") or secrets.get("google", {}).get("api_key", "").strip()
+        openai_key = os.getenv("OPENAI_API_KEY") or secrets.get("openai", {}).get("api_key", "").strip()
+        openrouter_key = os.getenv("OPENROUTER_API_KEY") or secrets.get("openrouter", {}).get("api_key", "").strip()
 
-        # For Bedrock, check AWS credentials
+        # For Bedrock, check AWS credentials - prefer environment variables
         bedrock_config = secrets.get("bedrock", {})
-        bedrock_key = bedrock_config.get("aws_access_key_id", "").strip()
-        bedrock_secret = bedrock_config.get("aws_secret_access_key", "").strip()
+        bedrock_key = os.getenv("AWS_ACCESS_KEY_ID") or bedrock_config.get("aws_access_key_id", "").strip()
+        bedrock_secret = os.getenv("AWS_SECRET_ACCESS_KEY") or bedrock_config.get("aws_secret_access_key", "").strip()
         bedrock_available = bool(bedrock_key and bedrock_secret)
 
         # Read user preference from main config

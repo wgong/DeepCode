@@ -1,5 +1,6 @@
 $schema: ./schema/mcp-agent.config.schema.json
-anthropic: null
+anthropic:
+  default_model: claude-sonnet-4.5
 default_search_server: brave
 document_segmentation:
   enabled: false
@@ -25,35 +26,18 @@ mcp:
         BOCHA_API_KEY: ''
         PYTHONPATH: .
     brave:
-      # macos and linux should use this
       args:
       - -y
       - '@modelcontextprotocol/server-brave-search'
       command: npx
-
-      # windows should use this
-      # args:
-      # # please use the correct path for your system
-      # - C:/Users/LEGION/AppData/Roaming/npm/node_modules/@modelcontextprotocol/server-brave-search/dist/index.js
-      # command: node
       env:
         BRAVE_API_KEY: ''
     filesystem:
-      # macos and linux should use this
       args:
       - -y
       - '@modelcontextprotocol/server-filesystem'
       - .
       command: npx
-
-      # windows should use this
-      # args:
-      # # please use the correct path for your system
-      # - C:/Users/LEGION/AppData/Roaming/npm/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js
-      # - .
-      # command: node
-
-
     code-implementation:
       args:
       - tools/code_implementation_server.py
@@ -100,53 +84,25 @@ mcp:
       command: python
       env:
         PYTHONPATH: .
-# LLM Provider Priority (选择使用哪个LLM / Choose which LLM to use)
-# Options: "anthropic", "google", "openai", "openrouter", "bedrock"
-# If not set or provider unavailable, will fallback to first available provider
-llm_provider: "google"  # 设置为 "google", "anthropic", "openai", "openrouter", 或 "bedrock"
-
+llm_provider: anthropic   # openrouter
 openai:
   base_max_tokens: 40000
-  # default_model: google/gemini-2.5-pro
   default_model: anthropic/claude-sonnet-4.5
-  # default_model: openai/gpt-oss-120b
-  # default_model: deepseek/deepseek-v3.2-exp
-  # default_model: moonshotai/kimi-k2-thinking
-  reasoning_effort: low  # Only for thinking models
+  reasoning_effort: low
   max_tokens_policy: adaptive
   retry_max_tokens: 32768
-
-# Configuration for Google AI (Gemini)
 google:
-  default_model: "gemini-3-pro-preview"
-
-anthropic:
-  default_model: "claude-sonnet-4.5"
-
-# Configuration for OpenRouter (unified LLM provider)
+  default_model: gemini-3-pro-preview
 openrouter:
   base_max_tokens: 40000
-  # OpenRouter model examples:
-  # default_model: "anthropic/claude-sonnet-4"
-  # default_model: "google/gemini-2.0-flash-thinking-exp:free"
-  # default_model: "openai/gpt-4o"
-  # default_model: "deepseek/deepseek-chat"
-  default_model: "anthropic/claude-sonnet-4"
+  default_model: anthropic/claude-sonnet-4
   max_tokens_policy: adaptive
   retry_max_tokens: 32768
-  # Optional: site_url and app_name for OpenRouter rankings
-  site_url: ""
-  app_name: "DeepCode"
-
-# Configuration for AWS Bedrock
+  site_url: ''
+  app_name: DeepCode
 bedrock:
   base_max_tokens: 40000
-  # Bedrock model examples:
-  # default_model: "anthropic.claude-3-5-sonnet-20241022-v2:0"
-  # default_model: "anthropic.claude-3-opus-20240229-v1:0"
-  # default_model: "meta.llama3-2-90b-instruct-v1:0"
-  default_model: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  default_model: anthropic.claude-3-5-sonnet-20241022-v2:0
   max_tokens_policy: adaptive
   retry_max_tokens: 32768
-
 planning_mode: traditional

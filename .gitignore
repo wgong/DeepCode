@@ -1,3 +1,7 @@
+mcp_agent.secrets.yaml
+mcp_agent.config.yaml
+logs/
+
 # Python-related files
 __pycache__/
 *.py[cod]
@@ -6,6 +10,7 @@ __pycache__/
 *.tgz
 *.tar.gz
 *.ini
+
 
 # Virtual Environment
 .venv/
@@ -57,6 +62,10 @@ deepcode-mcp/agent_folders
 TODO.md
 ignore_this.txt
 *.ignore.*
+
+# Configuration files with secrets (API keys)
+mcp_agent.secrets.yaml
+mcp_agent.config.yaml
 
 # unit-test files
 test_*
