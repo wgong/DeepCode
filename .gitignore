@@ -1,3 +1,6 @@
+mcp_agent.config.yaml
+mcp_agent.secrets.yaml
+
 # Python-related files
 __pycache__/
 *.py[cod]

@@ -1,5 +1,8 @@
 ```bash
-conda activate ragent
+conda create -n deepcode python=3.11
+conda activate deepcode
 
-pip install deepcode-hku
+pip install -e .
+
+git rm --cached mcp_agent.config.yaml mcp_agent.secrets.yaml
 ```
