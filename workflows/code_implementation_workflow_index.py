@@ -26,6 +26,7 @@ from mcp_agent.agents.agent import Agent
 
 # Local imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.config_loader import inject_env_vars_to_mcp_config
 from prompts.code_prompts import STRUCTURE_GENERATOR_PROMPT
 from prompts.code_prompts import (
     PURE_CODE_IMPLEMENTATION_SYSTEM_PROMPT_INDEX,
@@ -60,6 +61,8 @@ class CodeImplementationWorkflowWithIndex:
         self.enable_read_tools = (
             True  # Default value, will be overridden by run_workflow parameter
         )
+        # Ensure environment variables are available for MCP servers
+        self._prepare_mcp_environment()
 
     def _load_api_config(self) -> Dict[str, Any]:
         """Load API configuration from YAML file"""
@@ -75,6 +78,41 @@ class CodeImplementationWorkflowWithIndex:
         # Don't add handlers to child loggers - let them propagate to root
         logger.setLevel(logging.INFO)
         return logger
+
+    def _prepare_mcp_environment(self) -> None:
+        """
+        Prepare environment variables for MCP servers.
+
+        Ensures that API keys are propagated to MCP server subprocesses.
+        Since subprocesses inherit parent environment, we just need to ensure
+        the variables are set in os.environ.
+        """
+        # API keys that might be needed by MCP servers
+        # These will be inherited by subprocess when MCP servers launch
+        env_vars_to_check = {
+            'BRAVE_API_KEY': 'Brave Search',
+            'BOCHA_API_KEY': 'Bocha Search',
+        }
+
+        for env_var, service_name in env_vars_to_check.items():
+            if os.getenv(env_var):
+                # Variable already set - will be inherited by subprocesses
+                pass  # Silent - don't log to avoid noise
+            else:
+                # Check if it's in the config file
+                try:
+                    with open("mcp_agent.config.yaml", "r", encoding="utf-8") as f:
+                        config = yaml.safe_load(f)
+
+                    # Find the API key in MCP server configs
+                    for server_config in config.get("mcp", {}).get("servers", {}).values():
+                        env_config = server_config.get("env", {})
+                        if env_var in env_config and env_config[env_var]:
+                            # Set it in os.environ so subprocess will inherit it
+                            os.environ[env_var] = env_config[env_var]
+                            break
+                except Exception:
+                    pass  # Non-fatal, continue
 
     def _read_plan_file(self, plan_file_path: str) -> str:
         """Read implementation plan file"""

@@ -26,6 +26,71 @@ from workflows.agent_orchestration_engine import (
 from .sidebar_feed import log_sidebar_event, ensure_sidebar_logging
 
 
+def _ensure_mcp_environment_variables():
+    """
+    Ensure MCP server and LLM environment variables are properly set.
+
+    This handles:
+    1. MCP server API keys (Brave, Bocha) - injected into mcp_agent.config.yaml
+    2. OpenRouter base_url - set in os.environ so OpenAI client uses correct endpoint
+    """
+    import yaml
+
+    # Part 1: Ensure OpenRouter base_url is set for OpenAI client
+    try:
+        if not os.getenv('OPENAI_BASE_URL'):
+            # Load base_url from secrets file
+            with open("mcp_agent.secrets.yaml", "r", encoding="utf-8") as f:
+                secrets = yaml.safe_load(f)
+
+            openrouter_base_url = secrets.get("openrouter", {}).get("base_url", "")
+            if openrouter_base_url:
+                # Set it so OpenAI client uses OpenRouter endpoint
+                os.environ['OPENAI_BASE_URL'] = openrouter_base_url
+                print(f"✅ Set OPENAI_BASE_URL from secrets: {openrouter_base_url}")
+    except Exception as e:
+        print(f"Warning: Could not set OPENAI_BASE_URL: {e}")
+
+    # Part 2: Inject MCP server API keys into config
+    config_path = "mcp_agent.config.yaml"
+
+    try:
+        # Load current config
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = yaml.safe_load(f)
+
+        # Environment variables to inject
+        env_var_mapping = {
+            'brave': {'BRAVE_API_KEY': os.getenv('BRAVE_API_KEY', '')},
+            'bocha-mcp': {'BOCHA_API_KEY': os.getenv('BOCHA_API_KEY', '')},
+        }
+
+        modified = False
+        for server_name, env_vars in env_var_mapping.items():
+            if server_name in config.get("mcp", {}).get("servers", {}):
+                server_config = config["mcp"]["servers"][server_name]
+
+                # Ensure env section exists
+                if "env" not in server_config:
+                    server_config["env"] = {}
+
+                # Inject environment variables if they're set
+                for env_key, env_value in env_vars.items():
+                    if env_value:  # Only if env var is actually set
+                        if server_config["env"].get(env_key) != env_value:
+                            server_config["env"][env_key] = env_value
+                            modified = True
+
+        # Write back if modified
+        if modified:
+            with open(config_path, "w", encoding="utf-8") as f:
+                yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+    except Exception as e:
+        # Non-fatal - log but continue
+        print(f"Warning: Could not inject MCP environment variables: {e}")
+
+
 def _emergency_cleanup():
     """
     Emergency resource cleanup function
@@ -102,6 +167,9 @@ async def process_input_async(
         Processing result
     """
     try:
+        # Ensure environment variables are set for MCP servers
+        _ensure_mcp_environment_variables()
+
         # Create and use MCP app in the same async context
         app = MCPApp(name="paper_to_code")
 
