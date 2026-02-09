@@ -137,6 +137,8 @@ python deepcode.py
 # OR use the CLI interface
 python cli/main_cli.py
 
+write a python script using click CLI to generate fibonacci sequence less than a given integer as "--max-number"
+
 # OR if installed via pip
 deepcode
 ```

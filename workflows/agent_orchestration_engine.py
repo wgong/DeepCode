@@ -496,19 +496,19 @@ async def run_resource_processor(analysis_result: str, logger) -> str:
     Returns:
         str: Processing result with paper directory path
     """
-    # Pre-compute paper ID - deterministic, no LLM needed
+    # Generate paper directory with human-readable timestamp
+    from datetime import datetime
+
     papers_dir = "./deepcode_lab/papers"
     os.makedirs(papers_dir, exist_ok=True)
-    existing_ids = [
-        int(d)
-        for d in os.listdir(papers_dir)
-        if os.path.isdir(os.path.join(papers_dir, d)) and d.isdigit()
-    ]
-    next_id = max(existing_ids) + 1 if existing_ids else 1
-    paper_dir = os.path.join(papers_dir, str(next_id))
+
+    # Use datetime-based directory naming for better readability
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    paper_id = f"paper_{timestamp}"
+    paper_dir = os.path.join(papers_dir, paper_id)
     os.makedirs(paper_dir, exist_ok=True)
 
-    logger.info(f"📋 Paper ID: {next_id}")
+    logger.info(f"📋 Paper ID: {paper_id}")
     logger.info(f"📂 Paper directory: {paper_dir}")
 
     # Extract file path/URL from analysis_result - simple parsing, no LLM needed
@@ -530,7 +530,7 @@ async def run_resource_processor(analysis_result: str, logger) -> str:
             logger.info(f"📄 Direct file copy: {source_path} -> {paper_dir}")
             try:
                 operation_result = await move_file_to(
-                    source=source_path, destination=paper_dir, filename=f"{next_id}.pdf"
+                    source=source_path, destination=paper_dir, filename=f"{paper_id}.pdf"
                 )
                 # Check if operation succeeded
                 if (
@@ -551,7 +551,7 @@ async def run_resource_processor(analysis_result: str, logger) -> str:
                 operation_result = await download_file_to(
                     url=source_path,
                     destination=paper_dir,
-                    filename=f"{next_id}.pdf",  # Default to PDF, conversion will handle it
+                    filename=f"{paper_id}.pdf",  # Default to PDF, conversion will handle it
                 )
                 # Check if operation succeeded
                 if (
@@ -567,11 +567,11 @@ async def run_resource_processor(analysis_result: str, logger) -> str:
 
         # 3. If direct call succeeded, format result
         if direct_call_success:
-            dest_path = os.path.join(paper_dir, f"{next_id}.md")
+            dest_path = os.path.join(paper_dir, f"{paper_id}.md")
             result = json.dumps(
                 {
                     "status": "success",
-                    "paper_id": next_id,
+                    "paper_id": paper_id,
                     "paper_dir": paper_dir,
                     "file_path": dest_path,
                     "message": f"File successfully processed to {paper_dir}",
@@ -608,8 +608,8 @@ async def run_resource_processor(analysis_result: str, logger) -> str:
                 message = f"""Download/move the file to paper directory: {paper_dir}
 Source: {source_path}
 Input Type: {input_type}
-Paper ID: {next_id}
-Target filename: {next_id}.md (after conversion){context}
+Paper ID: {paper_id}
+Target filename: {paper_id}.md (after conversion){context}
 
 Use the appropriate tool to complete this task."""
 
@@ -625,7 +625,7 @@ Use the appropriate tool to complete this task."""
         return json.dumps(
             {
                 "status": "partial",
-                "paper_id": next_id,
+                "paper_id": paper_id,
                 "paper_dir": paper_dir,
                 "message": f"Paper directory created at {paper_dir}, manual file placement may be needed",
             }
@@ -1927,10 +1927,10 @@ async def execute_chat_based_planning_pipeline(
 
         # Create workspace directory structure for chat mode
         # First, let's create a temporary directory structure that mimics a paper workspace
-        import time
+        from datetime import datetime
 
-        # Generate a unique paper directory name
-        timestamp = str(int(time.time()))
+        # Generate a unique paper directory name with human-readable timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         paper_name = f"chat_project_{timestamp}"
 
         # Use workspace directory

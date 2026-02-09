@@ -1,0 +1,18 @@
+# Fibonacci CLI Generator - Project Dependencies
+# Python 3.8+ required
+
+# Core CLI Framework
+click>=8.1.0
+
+# Testing Framework
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: Enhanced Terminal Output (uncomment if needed)
+# colorama>=0.4.6
+# rich>=13.0.0
+
+# Development Dependencies (optional)
+# black>=23.0.0  # Code formatting
+# flake8>=6.0.0  # Linting
+# mypy>=1.0.0    # Type checking

@@ -1,0 +1,157 @@
+I'll analyze your requirements and create a comprehensive implementation plan for a CLI tool that generates Fibonacci sequences using Click.
+
+```yaml
+project_plan:
+  title: "Fibonacci CLI Generator"
+  description: "A Python CLI tool using Click to generate Fibonacci sequences up to a specified maximum number"
+  project_type: "tool"
+
+  # CUSTOM FILE TREE STRUCTURE (max 15 files, design as needed)
+  file_structure: |
+    fibonacci-cli/
+    ├── fibonacci_cli.py        # Main CLI application with Click
+    ├── fibonacci.py            # Core Fibonacci logic
+    ├── utils.py                # Helper functions (validation, formatting)
+    ├── tests/
+    │   ├── __init__.py
+    │   ├── test_fibonacci.py   # Unit tests for Fibonacci logic
+    │   └── test_cli.py         # CLI integration tests
+    ├── requirements.txt        # Project dependencies
+    ├── setup.py                # Package installation config
+    ├── .gitignore              # Git ignore rules
+    └── README.md               # Documentation and usage examples
+
+  # CORE IMPLEMENTATION PLAN
+  implementation_steps:
+    1. "Setup project structure and install Click library for CLI framework"
+    2. "Implement core Fibonacci sequence generator function in fibonacci.py with efficient algorithm (iterative approach for O(n) complexity)"
+    3. "Create Click CLI interface in fibonacci_cli.py with --max-number option, including input validation and error handling"
+    4. "Add utility functions for output formatting (list, comma-separated, or pretty-print options)"
+    5. "Implement comprehensive unit tests for Fibonacci logic and CLI commands using pytest and Click's testing utilities"
+    6. "Add setup.py to make the tool installable as a command-line utility with entry point"
+    7. "Create documentation with usage examples and edge case handling (0, 1, negative numbers)"
+
+  # DEPENDENCIES & SETUP
+  dependencies:
+    required_packages:
+      - "click>=8.1.0"
+      - "pytest>=7.4.0"
+      - "pytest-cov>=4.1.0"
+    optional_packages:
+      - "colorama>=0.4.6: For colored terminal output (cross-platform support)"
+      - "rich>=13.0.0: For enhanced terminal formatting and pretty output"
+    setup_commands:
+      - "python -m venv venv"
+      - "source venv/bin/activate  # On Windows: venv\\Scripts\\activate"
+      - "pip install -r requirements.txt"
+      - "pip install -e .  # Install as editable package"
+
+  # KEY TECHNICAL DETAILS
+  tech_stack:
+    language: "Python 3.8+"
+    frameworks: ["Click"]
+    key_libraries: ["click", "pytest"]
+
+  main_features:
+    - "CLI argument parsing with --max-number option for specifying upper limit"
+    - "Efficient iterative Fibonacci sequence generation (O(n) time, O(1) space)"
+    - "Input validation to handle edge cases (negative numbers, zero, non-integers)"
+    - "Formatted output options (default list format, optional comma-separated)"
+    - "Comprehensive error messages and help text"
+    - "Unit tests with >90% code coverage"
+    - "Installable as a system command (e.g., 'fibonacci --max-number 100')"
+    - "Additional options: --output-format (list/inline/json), --count (show sequence length)"
+
+  # IMPLEMENTATION DETAILS
+  core_algorithms:
+    fibonacci_generator:
+      approach: "Iterative generation for memory efficiency"
+      complexity: "Time: O(n), Space: O(k) where k is sequence length"
+      pseudocode: |
+        Initialize a, b = 0, 1
+        While a <= max_number:
+          Add a to sequence
+          a, b = b, a + b
+        Return sequence
+
+  cli_structure:
+    main_command: "fibonacci"
+    required_options:
+      - "--max-number INTEGER: Maximum value for Fibonacci sequence (required)"
+    optional_options:
+      - "--format [list|inline|json]: Output format (default: list)"
+      - "--count: Display count of numbers in sequence"
+      - "--help: Show help message"
+    
+  validation_rules:
+    - "max_number must be >= 0 (Fibonacci starts at 0)"
+    - "max_number must be an integer"
+    - "Provide clear error messages for invalid inputs"
+    - "Handle edge cases: max_number=0 returns [0], max_number=1 returns [0,1]"
+
+  testing_strategy:
+    unit_tests:
+      - "Test Fibonacci generation with various inputs (0, 1, 10, 100, 1000)"
+      - "Test edge cases (negative numbers should raise error)"
+      - "Test empty sequence scenarios"
+    integration_tests:
+      - "Test CLI with Click's CliRunner"
+      - "Verify exit codes and error messages"
+      - "Test all output format options"
+    
+  example_usage: |
+    # Basic usage
+    $ fibonacci --max-number 100
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+
+    # With count option
+    $ fibonacci --max-number 100 --count
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+    Total numbers: 12
+
+    # Inline format
+    $ fibonacci --max-number 50 --format inline
+    0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+
+    # JSON format
+    $ fibonacci --max-number 20 --format json
+    {"sequence": [0, 1, 1, 2, 3, 5, 8, 13], "count": 8, "max": 20}
+
+  success_criteria:
+    - "CLI correctly generates Fibonacci sequences up to specified max number"
+    - "All edge cases handled with appropriate error messages"
+    - "Tests pass with >90% coverage"
+    - "Tool installable and usable as system command"
+    - "Clear documentation and help text available"
+    - "Performance: Generate sequences up to 10^6 in under 1 second"
+```
+
+---
+
+## 🎯 **Quick Start Implementation Order**
+
+### **Phase 1: Core Functionality (30 min)**
+1. Create `fibonacci.py` with the generator function
+2. Build `fibonacci_cli.py` with basic Click command and --max-number option
+3. Test manually with `python fibonacci_cli.py --max-number 100`
+
+### **Phase 2: Enhancement (20 min)**
+4. Add input validation in `utils.py`
+5. Implement additional output formats
+6. Add --count and --format options
+
+### **Phase 3: Quality & Distribution (30 min)**
+7. Write unit tests in `tests/` directory
+8. Create `setup.py` for package installation
+9. Document usage in README.md
+
+---
+
+## 💡 **Key Design Decisions**
+
+1. **Iterative vs Recursive**: Using iterative approach for better performance and no stack overflow risk
+2. **Click vs argparse**: Click chosen for cleaner syntax, better testing support, and easier option handling
+3. **Validation Strategy**: Separate validation logic in utils.py for reusability and testability
+4. **Output Formats**: Multiple formats (list, inline, JSON) for different use cases (scripting, readability, data processing)
+
+This plan provides everything you need to build a production-ready Fibonacci CLI tool with professional code structure, comprehensive testing, and excellent user experience!

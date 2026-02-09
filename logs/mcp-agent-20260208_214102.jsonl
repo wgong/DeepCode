@@ -1,0 +1,14 @@
+{"level":"INFO","timestamp":"2026-02-08T21:39:31.829834","namespace":"mcp_agent.core.context","message":"Configuring logger with level: info"}
+{"level":"INFO","timestamp":"2026-02-08T21:39:31.915995","namespace":"mcp_agent.cli_agent_orchestration","message":"Loading subagents from configuration..."}
+{"level":"INFO","timestamp":"2026-02-08T21:39:31.916185","namespace":"mcp_agent.cli_agent_orchestration","message":"MCPApp initialized","data":{"data":{"progress_action":"Running","target":"cli_agent_orchestration","agent_name":"mcp_application_loop","session_id":"f5a1b565-d3ba-4790-b01e-147dd7cca92a"}}}
+{"level":"INFO","timestamp":"2026-02-08T21:41:02.337938","namespace":"mcp_agent.core.context","message":"Configuring logger with level: info"}
+{"level":"INFO","timestamp":"2026-02-08T21:41:02.353536","namespace":"mcp_agent.cli_agent_orchestration","message":"MCPApp initialized","data":{"data":{"progress_action":"Running","target":"cli_agent_orchestration","agent_name":"mcp_application_loop","session_id":"59501c3f-4e4f-4aac-91ae-01f64ef9ab78"}}}
+{"level":"INFO","timestamp":"2026-02-08T21:41:04.608735","namespace":"mcp_agent.cli_agent_orchestration","message":"MCPApp cleanup","data":{"data":{"progress_action":"Finished","target":"cli_agent_orchestration","agent_name":"mcp_application_loop"}}}
+{"level":"INFO","timestamp":"2026-02-08T21:41:02.353358","namespace":"mcp_agent.cli_agent_orchestration","message":"Loading subagents from configuration..."}
+{"level":"INFO","timestamp":"2026-02-08T21:41:04.610591","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Up and running with a persistent connection!"}
+{"level":"ERROR","timestamp":"2026-02-08T21:41:06.166607","namespace":"mcp_agent.executor.executor","message":"Error executing task: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-sonnet-4.5'}, 'request_id': 'req_011CXwitPEUokPrMMp46aCNC'}"}
+{"level":"INFO","timestamp":"2026-02-08T21:41:06.166892","namespace":"mcp_agent.mcp.mcp_aggregator.ChatPlanningAgent","message":"Last aggregator closing, shutting down all persistent connections..."}
+{"level":"INFO","timestamp":"2026-02-08T21:41:06.167585","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"Disconnecting all persistent server connections..."}
+{"level":"ERROR","timestamp":"2026-02-08T21:41:06.166712","namespace":"mcp_agent.workflows.llm.augmented_llm_anthropic.ChatPlanningAgent","message":"Error: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-sonnet-4.5'}, 'request_id': 'req_011CXwitPEUokPrMMp46aCNC'}"}
+{"level":"INFO","timestamp":"2026-02-08T21:41:06.167630","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Requesting shutdown..."}
+{"level":"INFO","timestamp":"2026-02-08T21:41:06.369006","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"All persistent server connections signaled to disconnect."}
