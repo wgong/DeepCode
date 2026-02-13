@@ -1,0 +1,10 @@
+{"level":"INFO","timestamp":"2025-12-21T20:39:32.156675","namespace":"mcp_agent.core.context","message":"Configuring logger with level: info"}
+{"level":"INFO","timestamp":"2025-12-21T20:39:32.189982","namespace":"mcp_agent.paper_to_code","message":"MCPApp initialized","data":{"data":{"progress_action":"Running","target":"paper_to_code","agent_name":"mcp_application_loop","session_id":"90d35fcb-31df-4203-99ae-cc748e152e49"}}}
+{"level":"INFO","timestamp":"2025-12-21T20:39:32.189731","namespace":"mcp_agent.paper_to_code","message":"Loading subagents from configuration..."}
+{"level":"INFO","timestamp":"2025-12-21T20:39:33.133209","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Up and running with a persistent connection!"}
+{"level":"ERROR","timestamp":"2025-12-21T20:39:34.973675","namespace":"mcp_agent.executor.executor","message":"Error executing task: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-sonnet-4.5'}, 'request_id': 'req_011CWLsZPYFfib8UYzdaNsWZ'}"}
+{"level":"INFO","timestamp":"2025-12-21T20:39:34.973958","namespace":"mcp_agent.mcp.mcp_aggregator.ResearchAnalyzerAgent","message":"Last aggregator closing, shutting down all persistent connections..."}
+{"level":"ERROR","timestamp":"2025-12-21T20:39:34.973711","namespace":"mcp_agent.workflows.llm.augmented_llm_anthropic.ResearchAnalyzerAgent","message":"Error: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-sonnet-4.5'}, 'request_id': 'req_011CWLsZPYFfib8UYzdaNsWZ'}"}
+{"level":"INFO","timestamp":"2025-12-21T20:39:34.975669","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"Disconnecting all persistent server connections..."}
+{"level":"INFO","timestamp":"2025-12-21T20:39:34.976435","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Requesting shutdown..."}
+{"level":"INFO","timestamp":"2025-12-21T20:39:35.177615","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"All persistent server connections signaled to disconnect."}

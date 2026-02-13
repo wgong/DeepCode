@@ -1,0 +1,10 @@
+{"level":"INFO","timestamp":"2025-12-21T20:23:36.388579","namespace":"mcp_agent.core.context","message":"Configuring logger with level: info"}
+{"level":"INFO","timestamp":"2025-12-21T20:23:36.422184","namespace":"mcp_agent.paper_to_code","message":"Loading subagents from configuration..."}
+{"level":"INFO","timestamp":"2025-12-21T20:23:36.422439","namespace":"mcp_agent.paper_to_code","message":"MCPApp initialized","data":{"data":{"progress_action":"Running","target":"paper_to_code","agent_name":"mcp_application_loop","session_id":"1fbe0eff-ba29-4a4a-8800-ee6e9ba932ed"}}}
+{"level":"INFO","timestamp":"2025-12-21T20:23:37.341721","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Up and running with a persistent connection!"}
+{"level":"ERROR","timestamp":"2025-12-21T20:23:40.080805","namespace":"mcp_agent.executor.executor","message":"Error executing task: Connection error."}
+{"level":"ERROR","timestamp":"2025-12-21T20:23:40.080896","namespace":"mcp_agent.workflows.llm.augmented_llm_openai.ResearchAnalyzerAgent","message":"Error: Connection error."}
+{"level":"INFO","timestamp":"2025-12-21T20:23:40.081317","namespace":"mcp_agent.mcp.mcp_aggregator.ResearchAnalyzerAgent","message":"Last aggregator closing, shutting down all persistent connections..."}
+{"level":"INFO","timestamp":"2025-12-21T20:23:40.083497","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"brave: Requesting shutdown..."}
+{"level":"INFO","timestamp":"2025-12-21T20:23:40.083319","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"Disconnecting all persistent server connections..."}
+{"level":"INFO","timestamp":"2025-12-21T20:23:40.284552","namespace":"mcp_agent.mcp.mcp_connection_manager","message":"All persistent server connections signaled to disconnect."}
